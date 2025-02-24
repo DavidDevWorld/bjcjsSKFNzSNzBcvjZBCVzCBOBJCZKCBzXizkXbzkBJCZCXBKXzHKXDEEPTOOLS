@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEO Blog Description Generator</title>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #4f46e5;
+            --background: #f8fafc;
+            --text: #1e293b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .generator-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 3rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            width: 100%;
+        }
+
+        button:hover {
+            background: var(--secondary);
+        }
+
+        .result {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-top: 2rem;
+            position: relative;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .spinner {
+            width: 24px;
+            height: 24px;
+            border: 3px solid #e2e8f0;
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .instructions {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-top: 2rem;
+        }
+
+        .instructions h2 {
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+
+        .instructions ol {
+            padding-left: 1.5rem;
+        }
+
+        .instructions li {
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .generator-form, .result, .instructions {
+                padding: 1.5rem;
+            }
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.5rem 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: var(--secondary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>SEO Blog Description Generator</h1>
+            <p>Generate compelling meta descriptions using AI</p>
+        </div>
+
+        <form class="generator-form" onsubmit="generateDescription(event)">
+            <div class="form-group">
+                <label for="websiteUrl">Website URL</label>
+                <input type="url" id="websiteUrl" required>
+            </div>
+
+            <div class="form-group">
+                <label for="keywords">Target Keywords</label>
+                <input type="text" id="keywords" required placeholder="e.g., digital marketing, seo tips">
+            </div>
+
+            <div class="form-group">
+                <label for="tone">Writing Tone</label>
+                <select id="tone" required>
+                    <option value="professional">Professional</option>
+                    <option value="casual">Casual</option>
+                    <option value="enthusiastic">Enthusiastic</option>
+                    <option value="informative">Informative</option>
+                </select>
+            </div>
+
+            <button type="submit">Generate Description</button>
+        </form>
+
+        <div class="loading">
+            <div class="spinner"></div>
+        </div>
+
+        <div class="result" id="result" style="display: none;">
+            <button class="copy-btn" onclick="copyToClipboard()">Copy</button>
+            <div id="generatedText"></div>
+        </div>
+
+        <div class="instructions">
+            <h2>How to Use</h2>
+            <ol>
+                <li>Enter your website URL</li>
+                <li>Add comma-separated target keywords</li>
+                <li>Select preferred writing tone</li>
+                <li>Click "Generate Description"</li>
+                <li>Review and copy the generated text</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        async function generateDescription(e) {
+            e.preventDefault();
+            const loading = document.querySelector('.loading');
+            const result = document.getElementById('result');
+            
+            // Show loading
+            loading.style.display = 'block';
+            result.style.display = 'none';
+
+            const payload = {
+                websiteUrl: document.getElementById('websiteUrl').value,
+                keywords: document.getElementById('keywords').value,
+                tone: document.getElementById('tone').value
+            };
+
+            try {
+                // Replace with your Gemini API key
+                const API_KEY = 'AIzaSyAuowxRR8neTPEiEDqtvXSc-aKaK1xnkoI';
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: `Generate an SEO-friendly blog description (500 characters max) for ${payload.websiteUrl} focusing on these keywords: ${payload.keywords}. Use a ${payload.tone} tone.`
+                            }]
+                        }]
+                    })
+                });
+
+                const data = await response.json();
+                const generatedText = data.candidates[0].content.parts[0].text;
+                
+                document.getElementById('generatedText').textContent = generatedText;
+                result.style.display = 'block';
+            } catch (error) {
+                alert('Error generating description. Please try again.');
+            } finally {
+                loading.style.display = 'none';
+            }
+        }
+
+        function copyToClipboard() {
+            const text = document.getElementById('generatedText').textContent;
+            navigator.clipboard.writeText(text)
+                .then(() => alert('Copied to clipboard!'))
+                .catch(err => console.error('Failed to copy:', err));
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdown Cleaner Pro</title>
+    <style>
+        :root {
+            --primary: #2A2A72;
+            --secondary: #009FFD;
+            --accent: #00E39F;
+            --background: #f8f9fa;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 2.5rem;
+        }
+
+        .editor-container {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: 1fr 1fr;
+            margin-bottom: 2rem;
+        }
+
+        textarea {
+            width: 100%;
+            height: 300px;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            resize: vertical;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 8px rgba(0, 227, 159, 0.2);
+        }
+
+        button {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: block;
+            margin: 0 auto 2rem;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 227, 159, 0.3);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-box {
+            background: var(--background);
+            padding: 1rem;
+            border-radius: 8px;
+            flex: 1;
+            text-align: center;
+            min-width: 200px;
+        }
+
+        .instructions {
+            background: var(--background);
+            padding: 2rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+        }
+
+        .instructions h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .instructions li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .editor-container {
+                grid-template-columns: 1fr;
+            }
+
+            textarea {
+                height: 200px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .stat-box {
+                min-width: 100%;
+                margin-bottom: 1rem;
+            }
+        }
+
+        .copy-btn {
+            background: var(--secondary);
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            display: inline-block;
+        }
+
+        .copy-btn.copied {
+            background: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Markdown Cleaner Pro</h1>
+        
+        <div class="editor-container">
+            <div>
+                <textarea id="input" placeholder="Paste your markdown here..."></textarea>
+                <div class="stat-box">Characters: <span id="input-count">0</span></div>
+            </div>
+            <div>
+                <textarea id="output" placeholder="Clean text will appear here..." readonly></textarea>
+                <div class="stat-box">Characters: <span id="output-count">0</span></div>
+                <button class="copy-btn" onclick="copyText()">Copy Clean Text</button>
+            </div>
+        </div>
+
+        <button onclick="processText()">Clean Markdown</button>
+
+        <div class="instructions">
+            <h2>How to Use</h2>
+            <ol>
+                <li>Paste your Markdown content into the left text area</li>
+                <li>Click the "Clean Markdown" button</li>
+                <li>Your cleaned text will appear in the right text area</li>
+                <li>Click the "Copy Clean Text" button to copy the result</li>
+                <li>Supports all common Markdown syntax including headers, lists, links, and code blocks</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        function processText() {
+            const input = document.getElementById('input').value;
+            const output = document.getElementById('output');
+            
+            // Markdown removal patterns
+            const patterns = [
+                // Headers
+                /^#+\s+/gm,
+                
+                /\*\*?(.*?)\*\*?/g,
+                // Strikethrough
+                /~~(.*?)~~/g,
+                // Links
+                /\[(.*?)\]\(.*?\)/g,
+                // Images
+                /!\[(.*?)\]\(.*?\)/g,
+                // Lists
+                /^[\*\-+]\s+/gm,
+                // Code blocks
+                /`{3}.*\n/g,
+                /`(.*?)`/g,
+                // Blockquotes
+                /^>\s+/gm,
+                // Horizontal rules
+                /^[-*]{3,}/gm
+                //$1
+            ];
+
+            let cleaned = input;
+            patterns.forEach(pattern => {
+                cleaned = cleaned.replace(pattern, '$1');
+            });
+
+            output.value = cleaned.trim();
+            updateStats();
+        }
+
+        function updateStats() {
+            const input = document.getElementById('input').value;
+            const output = document.getElementById('output').value;
+            
+            document.getElementById('input-count').textContent = input.length;
+            document.getElementById('output-count').textContent = output.length;
+        }
+
+        function copyText() {
+            const output = document.getElementById('output');
+            const copyBtn = document.querySelector('.copy-btn');
+            
+            navigator.clipboard.writeText(output.value).then(() => {
+                copyBtn.textContent = 'Copied!';
+                copyBtn.classList.add('copied');
+                setTimeout(() => {
+                    copyBtn.textContent = 'Copy Clean Text';
+                    copyBtn.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy text:', err);
+            });
+        }
+
+        // Real-time input tracking
+        document.getElementById('input').addEventListener('input', function() {
+            updateStats();
+            // Auto-process if text > 5000 characters
+            if (this.value.length > 5000) {
+                processText();
+            }
+        });
+
+        // Initialize stats
+        updateStats();
+    </script>
+</body>
+</html>

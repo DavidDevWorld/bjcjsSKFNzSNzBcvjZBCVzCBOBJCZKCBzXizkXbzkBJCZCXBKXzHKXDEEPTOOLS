@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEO Keywords Generator - Gemini AI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #4ecca3;
+            font-size: 2.5em;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #4ecca3;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        button {
+            background: linear-gradient(45deg, #4ecca3, #45b08c);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        button.copy-btn {
+            background: linear-gradient(45deg, #6c5ce7, #5b4ac7);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(78, 204, 163, 0.4);
+        }
+
+        button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+
+        #results {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .keyword-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .keyword-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4ecca3;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .instructions {
+            margin-top: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 25px;
+            border-radius: 15px;
+        }
+
+        .instructions h2 {
+            color: #4ecca3;
+            margin-bottom: 15px;
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #4ecca3;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            display: none;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { bottom: -50px; }
+            to { bottom: 20px; }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            #results {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SEO Keywords Generator 🔍</h1>
+        
+        <div class="input-group">
+            <input type="text" id="apiKey" placeholder="Enter API Key (Default included)">
+            <input type="text" id="keyword" placeholder="Enter your main keyword">
+            <div class="button-group">
+                <button onclick="generateKeywords()" id="generateBtn">Generate Keywords</button>
+                <button onclick="copyKeywords()" class="copy-btn" id="copyBtn" disabled>Copy All</button>
+            </div>
+        </div>
+
+        <div class="loading">
+            <div class="loading-spinner"></div>
+            <p>Generating keywords...</p>
+        </div>
+
+        <div id="results"></div>
+        <div class="notification" id="notification">Copied to clipboard!</div>
+
+        <div class="instructions">
+            <h2>How to Use:</h2>
+            <ol>
+                <li>Enter your main keyword/topic</li>
+                <li>Click "Generate Keywords" (uses default API key)</li>
+                <li>Wait a few seconds for the AI to generate SEO keywords</li>
+                <li>Click "Copy All" to copy all generated keywords</li>
+                <li>Click individual keywords to copy single ones</li>
+            </ol>
+            <p style="margin-top: 15px; color: #ff6666;">
+                Note: The default API key has limited usage. For personal use, get your own key from Google AI Studio.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Default API key (replace with your own for production)
+        const DEFAULT_API_KEY = 'AIzaSyAuowxRR8neTPEiEDqtvXSc-aKaK1xnkoI';
+
+        async function generateKeywords() {
+            const apiKey = document.getElementById('apiKey').value || DEFAULT_API_KEY;
+            const keyword = document.getElementById('keyword').value;
+            const resultsDiv = document.getElementById('results');
+            const loading = document.querySelector('.loading');
+            const generateBtn = document.getElementById('generateBtn');
+            const copyBtn = document.getElementById('copyBtn');
+
+            if (!keyword) {
+                showNotification('Please enter a keyword', 'error');
+                return;
+            }
+
+            try {
+                loading.style.display = 'block';
+                generateBtn.disabled = true;
+                copyBtn.disabled = true;
+                resultsDiv.innerHTML = '';
+
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: `Generate 20 SEO keywords related to "${keyword}". Provide only the keywords separated by commas, no numbers or explanations.`
+                            }]
+                        }]
+                    })
+                });
+
+                const data = await response.json();
+                const generatedText = data.candidates[0].content.parts[0].text;
+                const keywords = generatedText.split(',').map(kw => kw.trim());
+
+                resultsDiv.innerHTML = keywords.map(kw => `
+                    <div class="keyword-card" onclick="copySingleKeyword('${kw}')">
+                        ${kw}
+                    </div>
+                `).join('');
+
+                copyBtn.disabled = false;
+                showNotification('Keywords generated successfully!', 'success');
+            } catch (error) {
+                showNotification(`Error: ${error.message}`, 'error');
+                resultsDiv.innerHTML = `<div class="keyword-card" style="color: #ff4444">${error.message}</div>`;
+            } finally {
+                loading.style.display = 'none';
+                generateBtn.disabled = false;
+            }
+        }
+
+        function copyKeywords() {
+            const keywords = Array.from(document.querySelectorAll('.keyword-card'))
+                .map(card => card.textContent.trim())
+                .join(', ');
+
+            navigator.clipboard.writeText(keywords).then(() => {
+                showNotification('All keywords copied to clipboard!');
+            });
+        }
+
+        function copySingleKeyword(keyword) {
+            navigator.clipboard.writeText(keyword).then(() => {
+                showNotification('Copied: ' + keyword);
+            });
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.backgroundColor = type === 'error' ? '#ff4444' : 
+                                             type === 'success' ? '#4CAF50' : '#4ecca3';
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

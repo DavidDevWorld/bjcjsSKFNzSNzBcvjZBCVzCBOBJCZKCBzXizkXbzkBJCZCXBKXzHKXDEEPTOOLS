@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEO Blog Niche Finder - Gemini AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f0f2f5 0%, #e6e9ef 100%);
+            color: #2d3436;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2d3436;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            font-size: 2.2rem;
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        h1:after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: #0984e3;
+            margin: 1rem auto 0;
+            border-radius: 2px;
+        }
+
+        .input-group {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        input {
+            padding: 1rem;
+            border: 2px solid #dfe6e9;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #0984e3;
+            box-shadow: 0 0 0 3px rgba(9, 132, 227, 0.1);
+        }
+
+        button {
+            background: linear-gradient(135deg, #0984e3 0%, #6c5ce7 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(9, 132, 227, 0.2);
+        }
+
+        #results {
+            margin-top: 2rem;
+        }
+
+        .niche-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.03);
+            border: 1px solid #f1f3f5;
+        }
+
+        .niche-title {
+            color: #2d3436;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .niche-title svg {
+            width: 20px;
+            height: 20px;
+            color: #0984e3;
+        }
+
+        .detail-item {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.8rem;
+            align-items: baseline;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            min-width: 140px;
+            color: #636e72;
+            font-size: 0.9rem;
+        }
+
+        .detail-content {
+            flex: 1;
+            color: #2d3436;
+        }
+
+        .keyword-badge {
+            display: inline-block;
+            background: #f8f9fa;
+            color: #0984e3;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin: 0.2rem;
+            border: 1px solid #dfe6e9;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .loading-spinner {
+            width: 32px;
+            height: 32px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #0984e3;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .instructions {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+
+        .instructions h2 {
+            color: #2d3436;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+
+            .detail-item {
+                flex-direction: column;
+                gap: 0.2rem;
+            }
+
+            .detail-label {
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SEO Niche Explorer</h1>
+        
+        <div class="input-group">
+            <input type="text" id="topicInput" placeholder="Enter main topic (e.g., 'digital marketing', 'healthy living')...">
+            <button onclick="findNiches()">Analyze Topic</button>
+        </div>
+
+        <div class="loading">
+            <div class="loading-spinner"></div>
+            <p>Generating AI-powered insights...</p>
+        </div>
+
+        <div id="results"></div>
+
+        <div class="instructions">
+            <h2>How to Use:</h2>
+            <ol>
+                <li>Enter your primary topic of interest</li>
+                <li>Click "Analyze Topic" to initiate AI research</li>
+                <li>Review detailed niche analysis and recommendations</li>
+                <li>Explore suggested keywords and strategies</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        const API_KEY = 'AIzaSyAuowxRR8neTPEiEDqtvXSc-aKaK1xnkoI';
+        const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
+
+        async function findNiches() {
+            const topic = document.getElementById('topicInput').value.trim();
+            const resultsDiv = document.getElementById('results');
+            const loading = document.querySelector('.loading');
+
+            if (!topic) {
+                alert('Please enter a topic to analyze');
+                return;
+            }
+
+            loading.style.display = 'block';
+            resultsDiv.innerHTML = '';
+
+            const prompt = `Analyze the SEO potential for blog niches related to: ${topic}. 
+            Provide 5 specific niche ideas with this EXACT format:
+            
+            Niche [Number]: [Niche Name]
+            - Competition: [Low/Medium/High]
+            - Monetization: [1-5]
+            - Audience: [Target Audience Description]
+            - Keywords: [3 comma-separated long-tail keywords]
+            - Strategy: [Content strategy suggestions]`;
+
+            try {
+                const response = await fetch(`${API_URL}?key=${API_KEY}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{ text: prompt }]
+                        }]
+                    })
+                });
+
+                const data = await response.json();
+                const responseText = data.candidates[0].content.parts[0].text;
+                resultsDiv.innerHTML = formatResponse(responseText);
+            } catch (error) {
+                resultsDiv.innerHTML = `<div class="niche-card">Error: ${error.message}</div>`;
+            } finally {
+                loading.style.display = 'none';
+            }
+        }
+
+        function formatResponse(text) {
+            const niches = text.split('Niche ');
+            let html = '';
+            
+            niches.forEach((niche, index) => {
+                if (!niche.trim()) return;
+                
+                const lines = niche.split('\n').filter(line => line.trim());
+                const title = lines[0].replace(/^\d+:\s*/, '');
+                const details = {};
+                
+                lines.slice(1).forEach(line => {
+                    const [key, ...value] = line.split(':');
+                    if (key && value) {
+                        details[key.trim().toLowerCase()] = value.join(':').trim();
+                    }
+                });
+
+                html += `
+                    <div class="niche-card">
+                        <div class="niche-title">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                            </svg>
+                            ${title}
+                        </div>
+                        ${formatDetail('Competition', details.competition)}
+                        ${formatDetail('Monetization', details.monetization, true)}
+                        ${formatDetail('Target Audience', details.audience)}
+                        ${formatKeywords(details.keywords)}
+                        ${formatDetail('Content Strategy', details.strategy)}
+                    </div>
+                `;
+            });
+
+            return html;
+        }
+
+        function formatDetail(label, value, stars = false) {
+            if (!value) return '';
+            return `
+                <div class="detail-item">
+                    <span class="detail-label">${label}:</span>
+                    <span class="detail-content">
+                        ${stars ? '★'.repeat(Math.round(value)) + '☆'.repeat(5 - Math.round(value)) : value}
+                    </span>
+                </div>
+            `;
+        }
+
+        function formatKeywords(keywordString) {
+            if (!keywordString) return '';
+            const keywords = keywordString.split(',').map(k => k.trim());
+            return `
+                <div class="detail-item">
+                    <span class="detail-label">Key Keywords:</span>
+                    <span class="detail-content">
+                        ${keywords.map(k => `<span class="keyword-badge">${k}</span>`).join('')}
+                    </span>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
