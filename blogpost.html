@@ -1,279 +1,556 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Blog Post Generator | SEO Optimized Content</title>
-    <style>
-        :root {
-            --primary: #4F46E5;
-            --secondary: #10B981;
-            --text: #1F2937;
-            --background: #F9FAFB;
-            --card: #FFFFFF;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SEO Article Generator - Create 1500+ Word Human-Like Content</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.3/dist/tailwind.min.css" rel="stylesheet" />
+  <style>
+    .article-card {
+      transition: all 0.3s ease;
+    }
+    .article-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+    .gradient-bg {
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    }
+    #articleContent {
+      min-height: 300px;
+      max-height: 600px;
+      overflow-y: auto;
+    }
+    .word-count-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
+  <header class="gradient-bg py-4 text-white shadow-md">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <h1 class="text-2xl font-bold">SEO Article Generator</h1>
+        <p class="text-indigo-100 text-sm">Create 1500+ word, plagiarism-free, human-like articles</p>
+      </div>
+    </div>
+  </header>
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+  <main class="flex-grow container mx-auto py-8 px-4">
+    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+      <div class="p-6 border-b border-gray-200">
+        <h2 class="text-xl font-semibold mb-4">Article Configuration</h2>
+        
+        <div class="space-y-4">
+          <div>
+            <label for="topicInput" class="block text-sm font-medium text-gray-700 mb-1">Main Topic or Keyword*</label>
+            <input 
+              type="text" 
+              id="topicInput" 
+              placeholder="e.g., remote work benefits, sustainable fashion, cryptocurrency investing" 
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+          </div>
+          
+          <div>
+            <label for="secondaryKeywords" class="block text-sm font-medium text-gray-700 mb-1">Secondary Keywords (comma separated)</label>
+            <input 
+              type="text" 
+              id="secondaryKeywords" 
+              placeholder="e.g., productivity, work-life balance, home office setup" 
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+          </div>
+          
+          <div>
+            <label for="industrySelect" class="block text-sm font-medium text-gray-700 mb-1">Industry</label>
+            <select 
+              id="industrySelect" 
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              <option value="technology">Technology</option>
+              <option value="health">Health & Wellness</option>
+              <option value="finance">Finance & Investing</option>
+              <option value="marketing">Marketing & SEO</option>
+              <option value="education">Education & Learning</option>
+              <option value="travel">Travel & Tourism</option>
+              <option value="food">Food & Cooking</option>
+              <option value="fashion">Fashion & Beauty</option>
+              <option value="business">Business & Entrepreneurship</option>
+              <option value="environment">Environment & Sustainability</option>
+              <option value="home">Home & Interior Design</option>
+              <option value="fitness">Fitness & Sports</option>
+              <option value="parenting">Parenting & Family</option>
+              <option value="entertainment">Entertainment</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          
+          <div>
+            <label for="articleStyleSelect" class="block text-sm font-medium text-gray-700 mb-1">Article Style</label>
+            <select 
+              id="articleStyleSelect" 
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              <option value="informative">Informative & Educational</option>
+              <option value="persuasive">Persuasive & Convincing</option>
+              <option value="howto">Step-by-Step Guide</option>
+              <option value="storytelling">Storytelling & Narrative</option>
+              <option value="comparison">Comparison & Analysis</option>
+              <option value="case">Case Study Based</option>
+              <option value="problemsolution">Problem-Solution</option>
+              <option value="expert">Expert Interview Style</option>
+              <option value="research">Research-Based</option>
+              <option value="conversational">Conversational & Casual</option>
+            </select>
+          </div>
 
-        body {
-            background-color: var(--background);
-            color: var(--text);
-            line-height: 1.6;
-        }
+          <div>
+            <label for="toneSelect" class="block text-sm font-medium text-gray-700 mb-1">Content Tone</label>
+            <select 
+              id="toneSelect" 
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              <option value="professional">Professional & Formal</option>
+              <option value="conversational">Conversational & Friendly</option>
+              <option value="enthusiastic">Enthusiastic & Energetic</option>
+              <option value="authoritative">Authoritative & Expert</option>
+              <option value="empathetic">Empathetic & Understanding</option>
+              <option value="inspiring">Inspiring & Motivational</option>
+              <option value="humorous">Humorous & Light</option>
+              <option value="neutral">Neutral & Balanced</option>
+            </select>
+          </div>
+          
+          <div>
+            <label for="wordCountSelect" class="block text-sm font-medium text-gray-700 mb-1">Target Word Count</label>
+            <select 
+              id="wordCountSelect" 
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              <option value="1500">1500+ words</option>
+              <option value="2000">2000+ words</option>
+              <option value="2500">2500+ words</option>
+              <option value="3000">3000+ words</option>
+            </select>
+          </div>
+          
+          <div class="pt-2">
+            <button 
+              id="generateButton" 
+              class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-4 rounded-md transition-colors duration-200 flex items-center justify-center"
+            >
+              <span>Generate SEO Article</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clip-rule="evenodd" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <div id="loadingIndicator" class="hidden p-8 text-center">
+        <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+        <p class="mt-2 text-gray-600">Generating your article...</p>
+        <p class="text-sm text-gray-500 mt-1">This may take 1-2 minutes for a high-quality, 1500+ word article</p>
+      </div>
+      
+      <div id="resultsContainer" class="hidden p-6 bg-gray-50">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-lg font-semibold">Your Generated Article:</h3>
+          <div class="flex space-x-2">
+            <span id="wordCountDisplay" class="bg-indigo-100 text-indigo-800 text-xs font-medium px-2 py-1 rounded-full">0 words</span>
+          </div>
+        </div>
+        
+        <div id="articleContainer" class="relative bg-white rounded-lg border border-gray-200 shadow-sm p-6">
+          <h2 id="articleTitle" class="text-2xl font-bold mb-4 text-gray-900"></h2>
+          <div id="articleContent" class="prose prose-indigo max-w-none text-gray-700"></div>
+        </div>
+        
+        <div class="mt-6 flex flex-wrap gap-2">
+          <button 
+            id="copyArticleButton" 
+            class="bg-indigo-100 hover:bg-indigo-200 text-indigo-800 font-medium py-2 px-4 rounded-md transition-colors duration-200 flex items-center"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
+              <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
+            </svg>
+            Copy Article
+          </button>
+          <button 
+            id="downloadMdButton" 
+            class="bg-indigo-100 hover:bg-indigo-200 text-indigo-800 font-medium py-2 px-4 rounded-md transition-colors duration-200 flex items-center"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+            Download Markdown
+          </button>
+          <button 
+            id="downloadHtmlButton" 
+            class="bg-indigo-100 hover:bg-indigo-200 text-indigo-800 font-medium py-2 px-4 rounded-md transition-colors duration-200 flex items-center"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+            Download HTML
+          </button>
+          <button 
+            id="generateNewButton" 
+            class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 flex items-center"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
+            </svg>
+            Generate New Article
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="max-w-4xl mx-auto mt-8">
+      <h3 class="text-lg font-semibold mb-4">Benefits of Our AI Article Generator</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-white p-4 rounded-lg shadow-sm">
+          <div class="font-medium text-indigo-700 mb-2">100% Plagiarism-Free</div>
+          <p class="text-sm text-gray-600">Every article is uniquely generated with original content that passes plagiarism checks.</p>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-sm">
+          <div class="font-medium text-indigo-700 mb-2">SEO-Optimized Structure</div>
+          <p class="text-sm text-gray-600">Articles include optimal keyword density, headers, and meta descriptions for better rankings.</p>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-sm">
+          <div class="font-medium text-indigo-700 mb-2">Human-Like Quality</div>
+          <p class="text-sm text-gray-600">Advanced AI generates natural-sounding content that reads like it was written by a human expert.</p>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-sm">
+          <div class="font-medium text-indigo-700 mb-2">Complete Long-Form Content</div>
+          <p class="text-sm text-gray-600">Generate comprehensive 1500+ word articles that thoroughly cover your topic.</p>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-sm">
+          <div class="font-medium text-indigo-700 mb-2">Customizable Style & Tone</div>
+          <p class="text-sm text-gray-600">Tailor content to match your brand voice with multiple style and tone options.</p>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-sm">
+          <div class="font-medium text-indigo-700 mb-2">Ready to Publish</div>
+          <p class="text-sm text-gray-600">Download in Markdown or HTML format, ready for immediate publication on your blog.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <footer class="bg-gray-800 py-6 text-center text-gray-400 text-sm mt-12">
+    <p class="mb-2">Create high-quality, plagiarism-free SEO articles that engage readers and rank well in search engines</p>
+    <p>© 2025 SEO Article Generator</p>
+  </footer>
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
+  <script>
+    // DOM Elements
+    const topicInput = document.getElementById('topicInput');
+    const secondaryKeywords = document.getElementById('secondaryKeywords');
+    const industrySelect = document.getElementById('industrySelect');
+    const articleStyleSelect = document.getElementById('articleStyleSelect');
+    const toneSelect = document.getElementById('toneSelect');
+    const wordCountSelect = document.getElementById('wordCountSelect');
+    const generateButton = document.getElementById('generateButton');
+    const loadingIndicator = document.getElementById('loadingIndicator');
+    const resultsContainer = document.getElementById('resultsContainer');
+    const articleTitle = document.getElementById('articleTitle');
+    const articleContent = document.getElementById('articleContent');
+    const wordCountDisplay = document.getElementById('wordCountDisplay');
+    const copyArticleButton = document.getElementById('copyArticleButton');
+    const downloadMdButton = document.getElementById('downloadMdButton');
+    const downloadHtmlButton = document.getElementById('downloadHtmlButton');
+    const generateNewButton = document.getElementById('generateNewButton');
+    
+    // WebSocket and connection variables
+    let websocket = null;
+    const chatId = crypto.randomUUID();
+    let currentArticleText = '';
+    let currentArticleTitle = '';
+    
+    // AI article generator system prompt
+    const systemPrompt = `You are an expert SEO content writer specializing in creating high-quality, 100% original, human-like articles.
 
-        .header {
-            text-align: center;
-            margin-bottom: 3rem;
-            padding: 2rem 0;
-            background: linear-gradient(45deg, var(--primary), #6366F1);
-            color: white;
-            border-radius: 0 0 2rem 2rem;
-        }
+Your task is to generate a complete, well-structured article based on the topic, industry, style, and tone provided. Follow these requirements:
 
-        .generator-form {
-            background: var(--card);
-            padding: 2rem;
-            border-radius: 1rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 2rem;
-        }
+1. Create a compelling title that includes the main keyword
+2. Write a comprehensive article with proper headings (H2, H3) that meets or exceeds the target word count
+3. Ensure the content is 100% original and plagiarism-free
+4. Maintain a natural keyword density (1-2%) for the main keyword and include secondary keywords organically
+5. Write in a human-like, conversational style - avoid overly formal or AI-sounding text
+6. Include an introduction, body sections with subheadings, and conclusion
+7. Add transitional phrases between paragraphs and sections for natural flow
+8. Vary sentence structure and length
+9. Include relevant examples, statistics, or case studies when appropriate
+10. End with a compelling call-to-action
 
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
+Format your response with Markdown:
+- Use # for the article title
+- Use ## for main headings 
+- Use ### for subheadings
+- Use **bold** for emphasis
+- Use bullet points or numbered lists where appropriate
 
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-        }
+Start with ONLY the title as an H1 heading, followed by the complete article content. Do not include any explanations before or after the article.`;
 
-        input, select {
-            width: 100%;
-            padding: 0.8rem;
-            border: 2px solid #E5E7EB;
-            border-radius: 0.5rem;
-            font-size: 1rem;
-        }
+    // Event listeners
+    generateButton.addEventListener('click', generateArticle);
+    copyArticleButton.addEventListener('click', copyArticleContent);
+    downloadMdButton.addEventListener('click', downloadMarkdown);
+    downloadHtmlButton.addEventListener('click', downloadHtml);
+    generateNewButton.addEventListener('click', resetForm);
+    
+    // Initialize UI with focus on topic input
+    topicInput.focus();
+    
+    // Function to generate article
+    function generateArticle() {
+      // Validate input
+      if (!topicInput.value.trim()) {
+        alert('Please enter a main topic or keyword');
+        topicInput.focus();
+        return;
+      }
+      
+      // Show loading indicator
+      loadingIndicator.classList.remove('hidden');
+      resultsContainer.classList.add('hidden');
+      
+      // Prepare article generation message
+      const message = constructArticlePrompt();
+      
+      // Connect to WebSocket and send request
+      connectWebSocket(message);
+    }
+    
+    // Construct the article generation prompt
+    function constructArticlePrompt() {
+      const topic = topicInput.value.trim();
+      const keywords = secondaryKeywords.value.trim();
+      const industry = industrySelect.options[industrySelect.selectedIndex].text;
+      const style = articleStyleSelect.options[articleStyleSelect.selectedIndex].text;
+      const tone = toneSelect.options[toneSelect.selectedIndex].text;
+      const wordCount = wordCountSelect.value;
+      
+      let prompt = `Create a comprehensive ${wordCount}+ word article about "${topic}"`;
+      
+      if (keywords) {
+        prompt += ` that also includes the following secondary keywords: ${keywords}.`;
+      } else {
+        prompt += '.';
+      }
+      
+      prompt += ` The article is for the ${industry} industry.`;
+      prompt += ` Use a ${style} article style with a ${tone} tone.`;
+      prompt += ` Ensure the content is highly engaging, 100% original, and reads like it was written by a human expert.`;
+      prompt += ` Include a compelling title, proper headings, and subheadings for good SEO structure.`;
+      prompt += ` The article should be at least ${wordCount} words long and thoroughly cover the topic.`;
+      
+      return prompt;
+    }
+    
+    // WebSocket connection function
+    function connectWebSocket(message) {
+      const url = "wss://backend.buildpicoapps.com/api/chatbot/chat";
+      websocket = new WebSocket(url);
 
-        button {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 1rem 2rem;
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
+      websocket.addEventListener("open", () => {
+        websocket.send(
+          JSON.stringify({
+            chatId: chatId,
+            appId: "ahead-less",
+            systemPrompt: systemPrompt,
+            message: message,
+          })
+        );
+      });
 
-        button:hover {
-            transform: translateY(-2px);
-        }
+      let responseText = "";
+      
+      websocket.onmessage = (event) => {
+        responseText += event.data;
+      };
 
-        .blog-output {
-            background: var(--card);
-            padding: 2rem;
-            border-radius: 1rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            white-space: pre-wrap;
-            position: relative;
+      websocket.onclose = (event) => {
+        // Hide loading indicator
+        loadingIndicator.classList.add('hidden');
+        
+        if (event.code === 1000) {
+          // Process and display results
+          displayArticle(responseText);
+        } else {
+          alert("Connection lost. Please try again.");
         }
-
-        .copy-btn {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            padding: 0.5rem 1rem;
-            background: var(--secondary);
+      };
+    }
+    
+    // Parse and display the generated article
+    function displayArticle(markdownText) {
+      // Extract title and content
+      const lines = markdownText.split('\n');
+      let titleLine = '';
+      
+      // Find the first heading
+      for (let i = 0; i < lines.length; i++) {
+        if (lines[i].startsWith('# ')) {
+          titleLine = lines[i].substring(2).trim();
+          lines.splice(i, 1);
+          break;
         }
-
-        .loader {
-            display: none;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid var(--primary);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 2rem auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .instructions {
-            margin: 3rem 0;
-            padding: 2rem;
-            background: var(--card);
-            border-radius: 1rem;
-        }
-
-        strong {
-            color: var(--primary);
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-            
-            .header {
-                padding: 1rem 0;
-                border-radius: 0 0 1rem 1rem;
-            }
-            
-            .generator-form {
-                padding: 1rem;
-            }
-            
-            .copy-btn {
-                position: static;
-                margin-top: 1rem;
-            }
-        }
-    </style>
+      }
+      
+      // Save current article text and title
+      currentArticleTitle = titleLine;
+      currentArticleText = lines.join('\n');
+      
+      // Set title
+      articleTitle.textContent = currentArticleTitle;
+      
+      // Convert markdown to HTML for the content
+      articleContent.innerHTML = markdownToHtml(currentArticleText);
+      
+      // Calculate and display word count
+      const wordCount = countWords(currentArticleTitle + ' ' + currentArticleText);
+      wordCountDisplay.textContent = `${wordCount} words`;
+      
+      // Show results container
+      resultsContainer.classList.remove('hidden');
+      
+      // Add word count badge class based on target
+      const targetCount = parseInt(wordCountSelect.value);
+      if (wordCount >= targetCount) {
+        wordCountDisplay.classList.add('bg-green-100', 'text-green-800');
+        wordCountDisplay.classList.remove('bg-red-100', 'text-red-800', 'bg-indigo-100', 'text-indigo-800');
+      } else {
+        wordCountDisplay.classList.add('bg-red-100', 'text-red-800');
+        wordCountDisplay.classList.remove('bg-green-100', 'text-green-800', 'bg-indigo-100', 'text-indigo-800');
+      }
+    }
+    
+    // Simple Markdown to HTML converter
+    function markdownToHtml(markdown) {
+      // Replace headings
+      let html = markdown
+        .replace(/^## (.*?)$/gm, '<h2 class="text-xl font-semibold mt-6 mb-3">$1</h2>')
+        .replace(/^### (.*?)$/gm, '<h3 class="text-lg font-medium mt-4 mb-2">$1</h3>')
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>');
+      
+      // Replace lists
+      html = html.replace(/^\s*-\s+(.*?)$/gm, '<li class="ml-4 mb-1">$1</li>');
+      html = html.replace(/(<li.*?<\/li>)\n(<li.*?<\/li>)/g, '$1$2');
+      html = html.replace(/(<li.*?<\/li>)+/g, '<ul class="list-disc my-3 pl-5">$&</ul>');
+      
+      // Replace numbered lists
+      html = html.replace(/^\s*\d+\.\s+(.*?)$/gm, '<li class="ml-4 mb-1">$1</li>');
+      html = html.replace(/(<li.*?<\/li>)\n(<li.*?<\/li>)/g, '$1$2');
+      html = html.replace(/(<li.*?<\/li>)+/g, '<ol class="list-decimal my-3 pl-5">$&</ol>');
+      
+      // Replace paragraphs
+      const paragraphs = html.split('\n\n');
+      html = paragraphs.map(p => {
+        if (!p.trim()) return '';
+        if (p.includes('<h2') || p.includes('<h3') || p.includes('<ul') || p.includes('<ol')) return p;
+        return `<p class="mb-4">${p}</p>`;
+      }).join('\n');
+      
+      return html;
+    }
+    
+    // Count words in text
+    function countWords(text) {
+      return text.split(/\s+/).filter(word => word.length > 0).length;
+    }
+    
+    // Copy article to clipboard
+    function copyArticleContent() {
+      const fullArticle = `# ${currentArticleTitle}\n\n${currentArticleText}`;
+      
+      navigator.clipboard.writeText(fullArticle)
+        .then(() => {
+          const originalText = copyArticleButton.innerHTML;
+          copyArticleButton.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+            </svg>
+            Copied!
+          `;
+          setTimeout(() => {
+            copyArticleButton.innerHTML = originalText;
+          }, 2000);
+        })
+        .catch(err => {
+          console.error('Failed to copy: ', err);
+        });
+    }
+    
+    // Download article as Markdown
+    function downloadMarkdown() {
+      const fullArticle = `# ${currentArticleTitle}\n\n${currentArticleText}`;
+      const blob = new Blob([fullArticle], { type: 'text/markdown' });
+      downloadFile(blob, sanitizeFilename(currentArticleTitle) + '.md');
+    }
+    
+    // Download article as HTML
+    function downloadHtml() {
+      const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${currentArticleTitle}</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 20px; }
+    h1 { font-size: 28px; margin-bottom: 20px; }
+    h2 { font-size: 24px; margin-top: 30px; margin-bottom: 15px; }
+    h3 { font-size: 20px; margin-top: 25px; margin-bottom: 10px; }
+    p { margin-bottom: 16px; }
+    ul, ol { margin-bottom: 20px; padding-left: 30px; }
+    li { margin-bottom: 8px; }
+  </style>
 </head>
 <body>
-    <div class="header">
-        <div class="container">
-            <h1>AI Blog Post Generator</h1>
-            <p>Create SEO-optimized, plagiarism-free content with 1500+ words</p>
-        </div>
-    </div>
-
-    <div class="container">
-        <form class="generator-form" onsubmit="generateBlog(event)">
-            <div class="form-group">
-                <label for="topic">Blog Topic</label>
-                <input type="text" id="topic" required placeholder="Enter your blog topic...">
-            </div>
-
-            <div class="form-group">
-                <label for="keywords">SEO Keywords (comma separated)</label>
-                <input type="text" id="keywords" required placeholder="Enter keywords (e.g., seo, content marketing, blogging)">
-            </div>
-
-            <div class="form-group">
-                <label for="type">Blog Type</label>
-                <select id="type" required>
-                    <option value="">Select blog type</option>
-                    <option value="tutorial">Tutorial Blog Post</option>
-                    <option value="review">Tech Review Blog Post</option>
-                    <option value="article">Article Blog Post</option>
-                </select>
-            </div>
-
-            <button type="submit">Generate Blog Post</button>
-        </form>
-
-        <div class="loader" id="loader"></div>
-        <div class="blog-output" id="output"></div>
-
-        <div class="instructions">
-            <h2>How to Use:</h2>
-            <ol>
-                <li>Get your Gemini API key from Google AI Studio</li>
-                <li>Enter your blog topic and SEO keywords</li>
-                <li>Select the appropriate blog type from the dropdown</li>
-                <li>Click "Generate Blog Post"</li>
-                <li>Wait while we create your optimized content</li>
-                <li>Use the copy button to save your generated blog</li>
-            </ol>
-        </div>
-    </div>
-
-    <script>
-        const API_KEY = 'AIzaSyAuowxRR8neTPEiEDqtvXSc-aKaK1xnkoI'; // Replace with your API key
-        const MAX_TOKENS = 3000;
-
-        async function generateBlog(e) {
-            e.preventDefault();
-            const topic = document.getElementById('topic').value;
-            const keywords = document.getElementById('keywords').value;
-            const type = document.getElementById('type').value;
-            const output = document.getElementById('output');
-            const loader = document.getElementById('loader');
-
-            output.textContent = '';
-            loader.style.display = 'block';
-
-            try {
-                const prompt = `Create a detailed, SEO-friendly ${type} blog post about "${topic}". 
-                Requirements:
-                - Minimum 1500 words
-                - Plagiarism-free original content
-                - Human-like writing style
-                - Use SEO keywords: ${keywords}
-                - Use bold headers (##) and subheaders (###) with **bold formatting**
-                - Include introduction and conclusion
-                - Proper heading structure with H2 and H3 headings
-                - Include relevant examples and practical tips
-                - Optimize for search engines
-                - Use markdown formatting with headings, lists, and sections`;
-
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        contents: [{
-                            parts: [{
-                                text: prompt
-                            }]
-                        }]
-                    })
-                });
-
-                const data = await response.json();
-                loader.style.display = 'none';
-                
-                if (data.candidates && data.candidates[0].content.parts[0].text) {
-                    const content = data.candidates[0].content.parts[0].text;
-                    output.innerHTML = marked.parse(content.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'));
-                    
-                    // Add copy button
-                    const copyBtn = document.createElement('button');
-                    copyBtn.className = 'copy-btn';
-                    copyBtn.innerHTML = '📋 Copy Content';
-                    copyBtn.onclick = copyContent;
-                    output.prepend(copyBtn);
-                } else {
-                    output.textContent = 'Error generating content. Please try again.';
-                }
-            } catch (error) {
-                loader.style.display = 'none';
-                output.textContent = 'Error: ' + error.message;
-            }
-        }
-
-        function copyContent() {
-            const content = document.getElementById('output').textContent;
-            navigator.clipboard.writeText(content).then(() => {
-                alert('Content copied to clipboard!');
-            }).catch(err => {
-                alert('Failed to copy content');
-            });
-        }
-
-        // Simple markdown parser for bold text
-        const marked = {
-            parse: (text) => text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-        };
-    </script>
+  <article>
+    <h1>${currentArticleTitle}</h1>
+    ${markdownToHtml(currentArticleText)}
+  </article>
+</body>
+</html>`;
+      
+      const blob = new Blob([html], { type: 'text/html' });
+      downloadFile(blob, sanitizeFilename(currentArticleTitle) + '.html');
+    }
+    
+    // Helper function to download file
+    function downloadFile(blob, filename) {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.style.display = 'none';
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    }
+    
+    // Sanitize filename
+    function sanitizeFilename(name) {
+      return name.replace(/[/\\?%*:|"<>]/g, '-').trim();
+    }
+    
+    // Reset the form to generate a new article
+    function resetForm() {
+      // Don't clear the form inputs, just hide results and show form
+      loadingIndicator.classList.add('hidden');
+      resultsContainer.classList.add('hidden');
+      window.scrollTo(0, 0);
+    }
+  </script>
 </body>
 </html>
