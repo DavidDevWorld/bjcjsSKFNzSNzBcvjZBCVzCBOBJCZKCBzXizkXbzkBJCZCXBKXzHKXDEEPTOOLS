@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz App with Timer, Pin, and Progress Tracking</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #0b0c10;
+            color: #ffffff;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        #quiz-container {
+            margin-top: 50px;
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        #level {
+            font-size: 2em;
+            color: yellow;
+        }
+
+        #question-box {
+            background-color: #ffffff;
+            color: black;
+            width: 80%;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 1.5em;
+        }
+
+        .answer-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            width: 80%;
+            margin: 20px auto;
+        }
+
+        .answer-box {
+            background-color: #ffffff;
+            color: black;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.2em;
+            cursor: pointer;
+        }
+
+        .answer-box:hover {
+            background-color: #cfd8dc;
+        }
+
+        #timer {
+            font-size: 1.5em;
+            color: #FF5733;
+            margin: 20px;
+        }
+
+        #progress {
+            font-size: 1.5em;
+            color: #00FF00;
+            margin-top: 10px;
+        }
+
+        #progress-bar {
+            width: 80%;
+            height: 20px;
+            background-color: #333;
+            margin: 10px auto;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        #progress-bar-fill {
+            width: 0%;
+            height: 100%;
+            background-color: #00FF00;
+            transition: width 0.3s ease;
+        }
+
+        #congratulations {
+            font-size: 2em;
+            margin-top: 20px;
+            color: #00FF00;
+        }
+
+        #next-page-btn {
+            background-color: #00FF00;
+            color: #000;
+            font-size: 1.2em;
+            padding: 10px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 50px;
+        }
+
+        #next-page-btn:hover {
+            background-color: #008000;
+        }
+    </style>
+</head>
+<body>
+    <div id="quiz-container">
+        <div id="level">AI BIBLE QUIZ</div>
+        <div id="question-box">QUESTION</div>
+        <div id="timer">Time left: <span id="time-left">30</span> seconds</div>
+        <div id="progress">Question <span id="current-question">1</span> of <span id="total-questions">5</span></div>
+        <div id="progress-bar">
+            <div id="progress-bar-fill"></div>
+        </div>
+        <div class="answer-container">
+            <div class="answer-box" onclick="checkAnswer(this)">Answer 1</div>
+            <div class="answer-box" onclick="checkAnswer(this)">Answer 2</div>
+            <div class="answer-box" onclick="checkAnswer(this)">Answer 3</div>
+            <div class="answer-box" onclick="checkAnswer(this)">Answer 4</div>
+        </div>
+    </div>
+
+    <script>
+        let currentQuestion = 0;
+        let score = 0;
+        let timeLeft = 30; 
+        let timer;
+
+         const questions = [
+            {
+                question: "How many days did God take to create the world?",
+                options: ["6 days", "7 days", "5 days", "8 days"],
+                answer: "6 days"
+            },
+            {
+                question: "Who was Abraham's wife?",
+                options: ["Rebekah", "Sarah", "Rachel", "Leah"],
+                answer: "Sarah"
+            },
+            {
+                question: "What was the name of the garden where Adam and Eve lived?",
+                options: ["Garden of Gethsemane", "Garden of Eden", "Garden of Babylon", "Garden of Zion"],
+                answer: "Garden of Eden"
+            },
+            {
+                question: "Who sold his birthright for a bowl of stew?",
+                options: ["Jacob", "Esau", "Joseph", "Judah"],
+                answer: "Esau"
+            },
+            {
+                question: "How many sons did Jacob have?",
+                options: ["10", "12", "7", "9"],
+                answer: "12"
+            },
+            {
+                question: "What was Joseph's coat made of?",
+                options: ["Wool", "Linen", "Silk", "Many-colored cloth"],
+                answer: "Many-colored cloth"
+            },
+            {
+                question: "Who wrestled with an angel all night?",
+                options: ["Moses", "Abraham", "Jacob", "Isaac"],
+                answer: "Jacob"
+            },
+            {
+                question: "What was the name of Abraham's promised son?",
+                options: ["Ishmael", "Isaac", "Jacob", "Joseph"],
+                answer: "Isaac"
+            },
+            {
+                question: "What sign did God give after the flood?",
+                options: ["A dove", "A rainbow", "A burning bush", "A star"],
+                answer: "A rainbow"
+            },
+            {
+                question: "Who was turned into a pillar of salt?",
+                options: ["Eve", "Sarah", "Lot's wife", "Rebekah"],
+                answer: "Lot's wife"
+            },
+            {
+                question: "What was the name of Adam and Eve's third son?",
+                options: ["Seth", "Cain", "Abel", "Enos"],
+                answer: "Seth"
+            },
+            {
+                question: "How old was Noah when the flood started?",
+                options: ["500 years", "600 years", "700 years", "800 years"],
+                answer: "600 years"
+            },
+            {
+                question: "Who was Joseph's mother?",
+                options: ["Leah", "Rachel", "Bilhah", "Zilpah"],
+                answer: "Rachel"
+            },
+            {
+                question: "What did God create on the second day?",
+                options: ["Land and seas", "Sun and moon", "Firmament/Sky", "Animals"],
+                answer: "Firmament/Sky"
+            },
+            {
+                question: "Who said 'Am I my brother's keeper?'",
+                options: ["Cain", "Abel", "Noah", "Shem"],
+                answer: "Cain"
+            },
+            {
+                question: "What was Abraham's original name?",
+                options: ["Abram", "Isaac", "Jacob", "Lot"],
+                answer: "Abram"
+            },
+            {
+                question: "How many people entered Noah's ark?",
+                options: ["4", "6", "8", "10"],
+                answer: "8"
+            },
+            {
+                question: "What was the tower built in Shinar called?",
+                options: ["Tower of David", "Tower of Babel", "Tower of Babylon", "Tower of Shem"],
+                answer: "Tower of Babel"
+            },
+            {
+                question: "Who was Isaac's wife?",
+                options: ["Rebekah", "Rachel", "Leah", "Hagar"],
+                answer: "Rebekah"
+            },
+            {
+                question: "How old was Abraham when he died?",
+                options: ["150 years", "175 years", "200 years", "125 years"],
+                answer: "175 years"
+            }
+        ];
+
+        const totalQuestions = questions.length;
+
+        function shuffleQuestions(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        shuffleQuestions(questions);
+
+        function loadQuestion() {
+            if (currentQuestion < totalQuestions) {
+                document.getElementById('question-box').innerText = questions[currentQuestion].question;
+
+                let answerBoxes = document.getElementsByClassName('answer-box');
+                for (let i = 0; i < answerBoxes.length; i++) {
+                    answerBoxes[i].innerText = questions[currentQuestion].options[i];
+                }
+
+                document.getElementById('current-question').innerText = currentQuestion + 1;
+                document.getElementById('total-questions').innerText = totalQuestions;
+
+                let progressPercentage = ((currentQuestion + 1) / totalQuestions) * 100;
+                document.getElementById('progress-bar-fill').style.width = progressPercentage + '%';
+
+                timeLeft = 30;
+                document.getElementById('time-left').innerText = timeLeft;
+                clearInterval(timer);
+                timer = setInterval(updateTimer, 1000);
+            } else {
+                displayResult();
+            }
+        }
+
+        function updateTimer() {
+            timeLeft--;
+            document.getElementById('time-left').innerText = timeLeft;
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                currentQuestion++;
+                loadQuestion();
+            }
+        }
+
+        function checkAnswer(selectedAnswer) {
+            clearInterval(timer);
+            let selectedText = selectedAnswer.innerText;
+            
+            if (selectedText === questions[currentQuestion].answer) {
+                score++;
+            }
+
+            currentQuestion++;
+            loadQuestion();
+        }
+
+        function displayResult() {
+            let quizContainer = document.getElementById('quiz-container');
+            quizContainer.innerHTML = `<h2 id="congratulations">Congratulations!</h2>
+                                       <h2>You scored ${score} out of ${totalQuestions}</h2>
+                                       <p>Well done! You've completed the quiz.</p>`;
+
+            if (score >= 2) {
+                quizContainer.innerHTML += `<button id="next-page-btn" onclick="goToNextPage()">Go to Next Page</button>`;
+            }
+        }
+
+        function goToNextPage() {
+            window.location.href = "nextpage.html";
+        }
+
+        window.onload = loadQuestion;
+    </script>
+</body>
+</html>
